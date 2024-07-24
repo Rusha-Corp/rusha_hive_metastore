@@ -6,15 +6,15 @@ set -x
 
 SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
 
-function initialize_hive {
-  $HIVE_HOME/bin/schematool -dbType $DB_DRIVER -initOrUpgradeSchema
-  if [ $? -eq 0 ]; then
-    echo "Initialized schema successfully.."
-  else
-    echo "Schema initialization failed!"
-    exit 1
-  fi
-}
+# function initialize_hive {
+#   $HIVE_HOME/bin/schematool -dbType $DB_DRIVER -initOrUpgradeSchema
+#   if [ $? -eq 0 ]; then
+#     echo "Initialized schema successfully.."
+#   else
+#     echo "Schema initialization failed!"
+#     exit 1
+#   fi
+# }
 
 export HIVE_CONF_DIR=$HIVE_HOME/conf
 if [ -d "${HIVE_CUSTOM_CONF_DIR:-}" ]; then
