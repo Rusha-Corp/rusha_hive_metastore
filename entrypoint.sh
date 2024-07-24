@@ -43,16 +43,16 @@ function check_db_driver {
   fi
 }
 
-# function initialize_hive {
-#   echo "Initializing Hive schema with DB_DRIVER: $DB_DRIVER"
-#   $HIVE_HOME/bin/schematool -dbType $DB_DRIVER -initOrUpgradeSchema
-#   if [ $? -eq 0 ]; then
-#     echo "Initialized schema successfully.."
-#   else
-#     echo "Schema initialization failed!"
-#     exit 1
-#   fi
-# }
+function initialize_hive {
+  echo "Initializing Hive schema with DB_DRIVER: $DB_DRIVER"
+  $HIVE_HOME/bin/schematool -dbType $DB_DRIVER -initOrUpgradeSchema
+  if [ $? -eq 0 ]; then
+    echo "Initialized schema successfully.."
+  else
+    echo "Schema initialization failed!"
+    exit 1
+  fi
+}
 
 # Validate the DB_DRIVER
 check_db_driver
@@ -66,10 +66,10 @@ if [ -d "${HIVE_CUSTOM_CONF_DIR:-}" ]; then
 fi
 
 export HADOOP_CLIENT_OPTS="$HADOOP_CLIENT_OPTS -Xmx1G $SERVICE_OPTS"
-# if [[ "${SKIP_SCHEMA_INIT}" == "false" ]]; then
-#   # handles schema initialization
-#   initialize_hive
-# fi
+if [[ "${SKIP_SCHEMA_INIT}" == "false" ]]; then
+  # handles schema initialization
+  initialize_hive
+fi
 
 if [ "${SERVICE_NAME}" == "hiveserver2" ]; then
   export HADOOP_CLASSPATH=$TEZ_HOME/*:$TEZ_HOME/lib/*:$HADOOP_CLASSPATH
