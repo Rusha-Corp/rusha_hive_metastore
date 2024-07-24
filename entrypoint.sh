@@ -13,11 +13,7 @@ set -x
 : ${SERVICE_NAME:=metastore}
 : ${AWS_ACCESS_KEY_ID:=}
 : ${AWS_SECRET_ACCESS_KEY:=}
-: ${IS_RESUME:=false}
-: ${HIVE_HOME:=/opt/hive}
-: ${TEZ_HOME:=/opt/tez}
-: ${HADOOP_HOME:=/opt/hadoop}
-: ${HADOOP_CONF_DIR:=/opt/hadoop/etc/hadoop}
+
 
 SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
 
