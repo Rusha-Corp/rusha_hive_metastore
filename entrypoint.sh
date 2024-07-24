@@ -18,6 +18,7 @@ function check_db_driver {
 }
 
 function initialize_hive {
+  echo "Initializing Hive schema with DB_DRIVER: $DB_DRIVER"
   $HIVE_HOME/bin/schematool -dbType $DB_DRIVER -initOrUpgradeSchema
   if [ $? -eq 0 ]; then
     echo "Initialized schema successfully.."
@@ -26,6 +27,9 @@ function initialize_hive {
     exit 1
   fi
 }
+
+# Validate the DB_DRIVER
+check_db_driver
 
 export HIVE_CONF_DIR=$HIVE_HOME/conf
 if [ -d "${HIVE_CUSTOM_CONF_DIR:-}" ]; then
@@ -52,15 +56,15 @@ fi
 exec $HIVE_HOME/bin/hive \
         --skiphadoopversion \
         --skiphbasecp \
-        --service $SERVICE_NAME\
+        --service $SERVICE_NAME \
         --hiveconf fs.s3a.access.key=$AWS_ACCESS_KEY_ID \
         --hiveconf fs.s3a.secret.key=$AWS_SECRET_ACCESS_KEY \
         --hiveconf hive.metastore.warehouse.dir=$WAREHOUSE_LOCATION \
         --hiveconf hive.metastore.uris=$METASTORE_URI \
-        --hiveconf fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider\
-        --hiveconf hive.root.logger=DEBUG,console\
+        --hiveconf fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider \
+        --hiveconf hive.root.logger=DEBUG,console \
         --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem \
         --hiveconf javax.jdo.option.ConnectionDriverName=org.postgresql.Driver \
         --hiveconf javax.jdo.option.ConnectionUserName=$POSTGRES_USER \
         --hiveconf javax.jdo.option.ConnectionPassword=$POSTGRES_PASSWORD \
-        --hiveconf javax.jdo.option.ConnectionURL=jdbc:postgresql://$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB 
+        --hiveconf javax.jdo.option.ConnectionURL=jdbc:postgresql://$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB
