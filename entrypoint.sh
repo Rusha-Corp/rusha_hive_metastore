@@ -6,15 +6,26 @@ set -x
 
 SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
 
-# function initialize_hive {
-#   $HIVE_HOME/bin/schematool -dbType $DB_DRIVER -initOrUpgradeSchema
-#   if [ $? -eq 0 ]; then
-#     echo "Initialized schema successfully.."
-#   else
-#     echo "Schema initialization failed!"
-#     exit 1
-#   fi
-# }
+function check_db_driver {
+  if [ "$DB_DRIVER" == "derby" ]; then
+    echo "Using Derby as the Metastore database"
+  elif [ "$DB_DRIVER" == "postgresql" ]; then
+    echo "Using PostgreSQL as the Metastore database"
+  else
+    echo "Invalid DB_DRIVER: $DB_DRIVER"
+    exit 1
+  fi
+}
+
+function initialize_hive {
+  $HIVE_HOME/bin/schematool -dbType $DB_DRIVER -initOrUpgradeSchema
+  if [ $? -eq 0 ]; then
+    echo "Initialized schema successfully.."
+  else
+    echo "Schema initialization failed!"
+    exit 1
+  fi
+}
 
 export HIVE_CONF_DIR=$HIVE_HOME/conf
 if [ -d "${HIVE_CUSTOM_CONF_DIR:-}" ]; then
