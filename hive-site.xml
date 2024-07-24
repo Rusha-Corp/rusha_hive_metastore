@@ -52,8 +52,4 @@
         <name>hive.tez.input.format</name>
         <value>io.delta.hive.HiveInputFormat</value>
     </property>
-    <property>
-        <name>javax.jdo.option.ConnectionDriverName</name>
-        <value>org.postgresql.Driver</value>
-    </property>
 </configuration>
