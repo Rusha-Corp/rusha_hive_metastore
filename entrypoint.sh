@@ -46,4 +46,8 @@ exec $HIVE_HOME/bin/hive \
         --hiveconf hive.metastore.uris=$METASTORE_URI \
         --hiveconf fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider\
         --hiveconf hive.root.logger=DEBUG,console\
-        --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
+        --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem \
+        --hiveconf javax.jdo.option.ConnectionDriverName=org.postgresql.Driver \
+        --hiveconf javax.jdo.option.ConnectionUserName=$POSTGRES_USER \
+        --hiveconf javax.jdo.option.ConnectionPassword=$POSTGRES_PASSWORD \
+        --hiveconf javax.jdo.option.ConnectionURL=jdbc:postgresql://$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB 
