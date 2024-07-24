@@ -3,6 +3,21 @@
 set -x
 
 : ${DB_DRIVER:=derby}
+: ${POSTGRES_HOST:=localhost}
+: ${POSTGRES_PORT:=5432}
+: ${POSTGRES_USER:=hive}
+: ${POSTGRES_PASSWORD:=hive}
+: ${POSTGRES_DB:=metastore}
+: ${METASTORE_URI:=thrift://localhost:9083}
+: ${WAREHOUSE_LOCATION:=/user/hive/warehouse}
+: ${SERVICE_NAME:=metastore}
+: ${AWS_ACCESS_KEY_ID:=}
+: ${AWS_SECRET_ACCESS_KEY:=}
+: ${IS_RESUME:=false}
+: ${HIVE_HOME:=/opt/hive}
+: ${TEZ_HOME:=/opt/tez}
+: ${HADOOP_HOME:=/opt/hadoop}
+: ${HADOOP_CONF_DIR:=/opt/hadoop/etc/hadoop}
 
 SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
 
