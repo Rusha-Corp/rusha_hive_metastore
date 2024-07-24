@@ -67,4 +67,4 @@ exec $HIVE_HOME/bin/hive \
         --hiveconf javax.jdo.option.ConnectionDriverName=org.postgresql.Driver \
         --hiveconf javax.jdo.option.ConnectionUserName=$POSTGRES_USER \
         --hiveconf javax.jdo.option.ConnectionPassword=$POSTGRES_PASSWORD \
-        --hiveconf javax.jdo.option.ConnectionURL=jdbc:postgresql://$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB
+        --hiveconf javax.jdo.option.ConnectionURL=jdbc:$DB_DRIVER://$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB
