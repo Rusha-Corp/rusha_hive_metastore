@@ -59,5 +59,5 @@ exec $HIVE_HOME/bin/hive \
         --hiveconf fs.s3a.secret.key=$AWS_SECRET_ACCESS_KEY \
         --hiveconf hive.metastore.warehouse.dir=$WAREHOUSE_LOCATION \
         --hiveconf hive.metastore.uris=$METASTORE_URI \
-        --hiveconf fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider \
+        --hiveconf fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider\
         --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
