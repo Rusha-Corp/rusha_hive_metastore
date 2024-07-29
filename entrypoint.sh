@@ -49,6 +49,7 @@ if [ "${SERVICE_NAME}" == "hiveserver2" ]; then
   export HADOOP_CLASSPATH=$TEZ_HOME/*:$TEZ_HOME/lib/*:$HADOOP_CLASSPATH
 elif [ "${SERVICE_NAME}" == "metastore" ]; then
   export METASTORE_PORT=${METASTORE_PORT:-9083}
+  export METASTORE_HOST=${METASTORE_HOST:-localhost}
 fi
 
 # trigger update
@@ -60,7 +61,7 @@ exec $HIVE_HOME/bin/hive \
         --hiveconf fs.s3a.access.key=$AWS_ACCESS_KEY_ID \
         --hiveconf fs.s3a.secret.key=$AWS_SECRET_ACCESS_KEY \
         --hiveconf hive.metastore.warehouse.dir=$WAREHOUSE_LOCATION \
-        --hiveconf hive.metastore.uris=$HOSTNAME:$METASTORE_PORT \
+        --hiveconf hive.metastore.uris=thrift://$METASTORE_HOST:$METASTORE_PORT \
         --hiveconf fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider\
         --hiveconf hive.root.logger=DEBUG,console \
         --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
