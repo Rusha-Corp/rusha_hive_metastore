@@ -52,4 +52,9 @@
         <name>hive.tez.input.format</name>
         <value>io.delta.hive.HiveInputFormat</value>
     </property>
+    <property>
+        <name>hive.metastore.client.socket.timeout</name>
+        <value>60</value> <!-- Timeout in seconds -->
+        <description>Socket timeout for the client connections.</description>
+    </property>
 </configuration>
