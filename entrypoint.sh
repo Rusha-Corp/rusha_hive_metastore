@@ -54,8 +54,6 @@ fi
 # trigger update
 
 exec $HIVE_HOME/bin/hive \
-        --skiphadoopversion \
-        --skiphbasecp \
         --service $SERVICE_NAME\
         --hiveconf fs.s3a.access.key=$AWS_ACCESS_KEY_ID \
         --hiveconf fs.s3a.secret.key=$AWS_SECRET_ACCESS_KEY \
