@@ -2,6 +2,7 @@ FROM apache/hive:4.0.0-beta-1
 
 USER root
 RUN apt update && apt install curl -y
+RUN apt install dnsutils -y
 
 RUN curl -L --output postgresql-42.4.0.jar https://jdbc.postgresql.org/download/postgresql-42.4.0.jar && \
     curl -L --output hadoop-aws-3.3.1.jar  https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.6/hadoop-aws-3.3.6.jar && \
