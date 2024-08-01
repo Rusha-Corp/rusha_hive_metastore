@@ -8,9 +8,6 @@ set -x  # Enable debugging mode
 # Skip schema initialization if IS_RESUME is set
 SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
 
-# Set Hadoop client options including JVM heap size and logging configuration
-export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G"
-
 # Configure logging through log4j configuration file
 export HIVE_LOG4J_FILE="$HIVE_CONF_DIR/log4j.properties"
 
