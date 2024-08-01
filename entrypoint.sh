@@ -8,6 +8,8 @@ SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
 
 # Configure logging through log4j configuration file
 export HIVE_LOG4J_FILE="$HIVE_CONF_DIR/log4j.properties"
+export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G -Dhive.root.logger=DEBUG,console"
+
 
 function check_db_driver {
   if [ "$DB_DRIVER" == "derby" ]; then
@@ -41,8 +43,6 @@ if [ -d "${HIVE_CUSTOM_CONF_DIR:-}" ]; then
   export HADOOP_CONF_DIR=$HIVE_CONF_DIR
   export TEZ_CONF_DIR=$HIVE_CONF_DIR
 fi
-
-export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G -Dhive.root.logger=DEBUG,console"
 
 if [[ "${SKIP_SCHEMA_INIT}" == "false" ]]; then
   # handles schema initialization
