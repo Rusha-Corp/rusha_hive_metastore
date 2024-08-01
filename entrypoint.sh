@@ -59,7 +59,7 @@ case "$SERVICE_NAME" in
 esac
 
 # Initialize or upgrade Hive schema if not skipped
-if [[ "$SKIP_SCHEMA_INIT" == "true" ]]; then
+if [[ "$SKIP_SCHEMA_INIT" == "false" ]]; then
   # Check if the Metastore schema exists
   if ! $HIVE_HOME/bin/schematool -dbType "$DB_DRIVER" -info | grep -q "schema version"; then
     initialize_hive
