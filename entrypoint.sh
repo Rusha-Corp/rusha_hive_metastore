@@ -44,18 +44,17 @@ fi
 
 export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G -Dhive.root.logger=DEBUG,console"
 
-
-if [ "${SERVICE_NAME}" == "hiveserver2" ]; then
-  export HADOOP_CLASSPATH=$TEZ_HOME/*:$TEZ_HOME/lib/*:$HADOOP_CLASSPATH
-  export SKIP_SCHEMA_INIT=true
-elif [ "${SERVICE_NAME}" == "metastore" ]; then
-  export METASTORE_PORT=${METASTORE_PORT:-9083}
-fi
-
 if [[ "${SKIP_SCHEMA_INIT}" == "false" ]]; then
   # handles schema initialization
   initialize_hive
 fi
+
+if [ "${SERVICE_NAME}" == "hiveserver2" ]; then
+  export HADOOP_CLASSPATH=$TEZ_HOME/*:$TEZ_HOME/lib/*:$HADOOP_CLASSPATH
+elif [ "${SERVICE_NAME}" == "metastore" ]; then
+  export METASTORE_PORT=${METASTORE_PORT:-9083}
+fi
+
 
 # trigger update
 
