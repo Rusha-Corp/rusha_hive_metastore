@@ -61,4 +61,5 @@ exec $HIVE_HOME/bin/hive \
         --hiveconf hive.metastore.uris=$METASTORE_URIS \
         --hiveconf fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider\
         --hiveconf hive.root.logger=DEBUG,console \
-        --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
+        --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem \
+        --hiveconf hive.root.logger=DEBUG,console \
