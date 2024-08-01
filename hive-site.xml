@@ -52,4 +52,9 @@
         <name>hive.tez.input.format</name>
         <value>io.delta.hive.HiveInputFormat</value>
     </property>
+    <property>
+        <name>hive.metastore.uris</name>
+        <value></value>
+        <description>Empty value indicates local metastore</description>
+    </property>
 </configuration>
