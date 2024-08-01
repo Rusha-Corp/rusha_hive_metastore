@@ -10,11 +10,22 @@ SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
 
 function initialize_hive {
   echo "Initializing Hive schema with DB_DRIVER: $DB_DRIVER"
-  $HIVE_HOME/bin/schematool -dbType "$DB_DRIVER" -initOrUpgradeSchema
+  $HIVE_HOME/bin/schematool -dbType "$DB_DRIVER" -initSchema
   if [[ $? -eq 0 ]]; then
-    echo "Initialized schema successfully."
+    echo "Schema initialized successfully."
   else
     echo "Schema initialization failed!"
+    exit 1
+  fi
+}
+
+function upgrade_hive_schema {
+  echo "Upgrading Hive schema with DB_DRIVER: $DB_DRIVER"
+  $HIVE_HOME/bin/schematool -dbType "$DB_DRIVER" -upgradeSchema
+  if [[ $? -eq 0 ]]; then
+    echo "Schema upgraded successfully."
+  else
+    echo "Schema upgrade failed!"
     exit 1
   fi
 }
@@ -30,7 +41,6 @@ fi
 # Set Hadoop client options including JVM heap size and logging configuration
 export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G -Dhive.root.logger=DEBUG,console"
 
-
 # Configure service-specific settings
 case "$SERVICE_NAME" in
   hiveserver2)
@@ -45,11 +55,15 @@ case "$SERVICE_NAME" in
     ;;
 esac
 
-# Initialize Hive schema if not skipped
+# Initialize or upgrade Hive schema if not skipped
 if [[ "$SKIP_SCHEMA_INIT" == "false" ]]; then
-  initialize_hive
+  # Check if the Metastore schema exists
+  if ! $HIVE_HOME/bin/schematool -dbType "$DB_DRIVER" -info | grep -q "schema version"; then
+    initialize_hive
+  else
+    upgrade_hive_schema
+  fi
 fi
-
 
 # Execute Hive command with required configurations
 exec $HIVE_HOME/bin/hive \
