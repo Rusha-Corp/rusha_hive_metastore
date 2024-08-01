@@ -30,15 +30,12 @@ fi
 # Set Hadoop client options including JVM heap size and logging configuration
 export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G -Dhive.root.logger=DEBUG,console"
 
-# Initialize Hive schema if not skipped
-if [[ "$SKIP_SCHEMA_INIT" == "false" ]]; then
-  initialize_hive
-fi
 
 # Configure service-specific settings
 case "$SERVICE_NAME" in
   hiveserver2)
     export HADOOP_CLASSPATH="$TEZ_HOME/*:$TEZ_HOME/lib/*:$HADOOP_CLASSPATH"
+    export SKIP_SCHEMA_INIT="true"
     ;;
   metastore)
     export METASTORE_PORT="${METASTORE_PORT:-9083}"
@@ -48,6 +45,12 @@ case "$SERVICE_NAME" in
     exit 1
     ;;
 esac
+
+# Initialize Hive schema if not skipped
+if [[ "$SKIP_SCHEMA_INIT" == "false" ]]; then
+  initialize_hive
+fi
+
 
 # Execute Hive command with required configurations
 exec $HIVE_HOME/bin/hive \
