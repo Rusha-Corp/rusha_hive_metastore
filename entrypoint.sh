@@ -39,7 +39,10 @@ if [[ -d "${HIVE_CUSTOM_CONF_DIR:-}" ]]; then
 fi
 
 # Set Hadoop client options including JVM heap size and logging configuration
-export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G -Dhive.root.logger=DEBUG,console"
+export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G"
+
+# Configure logging through log4j configuration file
+export HIVE_LOG4J_FILE="$HIVE_CONF_DIR/log4j.properties"
 
 # Configure service-specific settings
 case "$SERVICE_NAME" in
@@ -75,4 +78,5 @@ exec $HIVE_HOME/bin/hive \
   --hiveconf hive.metastore.warehouse.dir="$WAREHOUSE_LOCATION" \
   --hiveconf hive.metastore.uris="$METASTORE_URIS" \
   --hiveconf fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider \
-  --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
+  --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem \
+  --hiveconf hive.log4j.configuration=file:$HIVE_LOG4J_FILE
