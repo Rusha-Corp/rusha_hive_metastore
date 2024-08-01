@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property>
-        <name>hive.root.logger</name>
-        <value>DEBUG,console</value>
-        <description>Log level and appender for Hive logs</description>
-    </property>
-    <property>
         <name>hive.server2.enable.doAs</name>
         <value>false</value>
     </property>
