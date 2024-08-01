@@ -10,22 +10,11 @@ SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
 
 function initialize_hive {
   echo "Initializing Hive schema with DB_DRIVER: $DB_DRIVER"
-  $HIVE_HOME/bin/schematool -dbType "$DB_DRIVER" -initSchema
+  $HIVE_HOME/bin/schematool -dbType "$DB_DRIVER" -initOrUpgradeSchema
   if [[ $? -eq 0 ]]; then
-    echo "Schema initialized successfully."
+    echo "Initialized schema successfully."
   else
     echo "Schema initialization failed!"
-    exit 1
-  fi
-}
-
-function upgrade_hive_schema {
-  echo "Upgrading Hive schema with DB_DRIVER: $DB_DRIVER"
-  $HIVE_HOME/bin/schematool -dbType "$DB_DRIVER" -upgradeSchema
-  if [[ $? -eq 0 ]]; then
-    echo "Schema upgraded successfully."
-  else
-    echo "Schema upgrade failed!"
     exit 1
   fi
 }
@@ -39,10 +28,8 @@ if [[ -d "${HIVE_CUSTOM_CONF_DIR:-}" ]]; then
 fi
 
 # Set Hadoop client options including JVM heap size and logging configuration
-export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G"
+export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G -Dhive.root.logger=DEBUG,console"
 
-# Configure logging through log4j configuration file
-export HIVE_LOG4J_FILE="$HIVE_CONF_DIR/log4j.properties"
 
 # Configure service-specific settings
 case "$SERVICE_NAME" in
@@ -58,15 +45,11 @@ case "$SERVICE_NAME" in
     ;;
 esac
 
-# Initialize or upgrade Hive schema if not skipped
+# Initialize Hive schema if not skipped
 if [[ "$SKIP_SCHEMA_INIT" == "false" ]]; then
-  # Check if the Metastore schema exists
-  if ! $HIVE_HOME/bin/schematool -dbType "$DB_DRIVER" -info | grep -q "schema version"; then
-    initialize_hive
-  else
-    upgrade_hive_schema
-  fi
+  initialize_hive
 fi
+
 
 # Execute Hive command with required configurations
 exec $HIVE_HOME/bin/hive \
@@ -78,5 +61,4 @@ exec $HIVE_HOME/bin/hive \
   --hiveconf hive.metastore.warehouse.dir="$WAREHOUSE_LOCATION" \
   --hiveconf hive.metastore.uris="$METASTORE_URIS" \
   --hiveconf fs.s3a.aws.credentials.provider=org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider \
-  --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem \
-  --hiveconf hive.log4j.configuration=file:$HIVE_LOG4J_FILE
+  --hiveconf fs.s3a.impl=org.apache.hadoop.fs.s3a.S3AFileSystem
