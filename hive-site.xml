@@ -58,11 +58,6 @@
         <value>io.delta.hive.HiveInputFormat</value>
     </property>
 
-    <property>
-        <name>hive.metastore.uris</name>
-        <value></value>
-    </property>
-
     <!-- Additional optimization properties -->
     <property>
         <name>hive.tez.auto.reducer.parallelism</name>
