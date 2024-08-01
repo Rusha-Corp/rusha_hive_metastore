@@ -2,8 +2,6 @@
 
 set -x
 
-: ${DB_DRIVER:=derby}
-
 SKIP_SCHEMA_INIT="${IS_RESUME:-false}"
 
 # Configure logging through log4j configuration file
