@@ -35,7 +35,6 @@ export HADOOP_CLIENT_OPTS="${HADOOP_CLIENT_OPTS:-} -Xmx1G -Dhive.root.logger=DEB
 case "$SERVICE_NAME" in
   hiveserver2)
     export HADOOP_CLASSPATH="$TEZ_HOME/*:$TEZ_HOME/lib/*:$HADOOP_CLASSPATH"
-    export SKIP_SCHEMA_INIT="true"
     ;;
   metastore)
     export METASTORE_PORT="${METASTORE_PORT:-9083}"
