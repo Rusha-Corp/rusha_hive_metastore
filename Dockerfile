@@ -31,7 +31,7 @@ COPY entrypoint.sh /opt/hive/entrypoint.sh
 RUN chmod +x /opt/hive/entrypoint.sh
 ENTRYPOINT ["/opt/hive/entrypoint.sh"]
 
-USER hive
+# USER hive
 
 
 
