@@ -1,4 +1,4 @@
-FROM apache/hive:4.0.0-beta-1
+FROM apache/hive:4.0.0
 
 USER root
 RUN apt update && apt install curl -y
@@ -25,13 +25,7 @@ RUN curl -L --output postgresql-42.4.0.jar https://jdbc.postgresql.org/download/
 
 
 RUN rm -rf postgresql-42.4.0.jar hadoop-aws-3.3.1.jar aws-java-sdk-1.12.609.jar hadoop-common-3.3.6.jar aws-java-sdk-s3-1.12.609.jar aws-java-sdk-core-1.12.609.jar
-
 COPY  hive-site.xml /opt/hive/conf/hive-site.xml
-COPY entrypoint.sh /opt/hive/entrypoint.sh
-RUN chmod +x /opt/hive/entrypoint.sh
-ENTRYPOINT ["/opt/hive/entrypoint.sh"]
-
-USER hive
 
 
 

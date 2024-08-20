@@ -1,0 +1,27 @@
+- name: Deploy spark hive metastore
+  hosts: localhost
+  vars:
+    namespace: "{{ namespace }}"
+    registry: "{{ registry }}"
+  tasks:
+  - name: Pull git repo
+    ansible.builtin.git:
+      repo: git@github.com:Rusha-Corp/rusha_hive_metastore.git
+      version: main
+      dest: /tmp/hive-metastore
+      force: yes
+
+  - name: Set tag for hive metastore image
+    set_fact:
+      tag: "{{ lookup('pipe', 'git -C /tmp/hive-metastore rev-parse --short HEAD') }}"
+
+  - name: Build hive metastore image
+    become: yes
+    command: >
+      docker buildx build
+      --platform linux/amd64
+      --build-arg BUILDKIT_INLINE_CACHE=1
+      -t {{ registry }}/hive_metastore:{{ tag }}
+      . --push
+    args:
+      chdir: /tmp/hive-metastore
