@@ -23,4 +23,13 @@ RUN curl -L --output postgresql-42.4.0.jar https://jdbc.postgresql.org/download/
 
 ENV HIVE_VERSION=4.0.0
 
+# Remove the downloaded jars
+RUN rm postgresql-42.4.0.jar \
+    hadoop-aws-3.3.1.jar \
+    aws-java-sdk-1.12.609.jar \
+    aws-java-sdk-s3-1.12.609.jar \
+    aws-java-sdk-core-1.12.609.jar \
+    delta-spark_2.12-3.0.0.jar \
+    delta-storage-3.0.0.jar \
+    scala-library-2.12.4.jar
 
