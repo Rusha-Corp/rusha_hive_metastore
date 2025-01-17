@@ -1,0 +1,49 @@
+services:
+  metastore-dev:
+    build: .
+    networks:
+      - spark-container-network-dbt
+    volumes:
+      - /tmp:/tmp
+    environment:
+      - SCHEMA_COMMAND=upgradeSchema
+      - SERVICE_NAME=metastore
+      - DB_DRIVER=postgres    
+      - VERBOSE="true"
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - HADOOP_CLIENT_OPTS=-Xmx1G -Djavax.jdo.option.ConnectionDriverName=org.postgresql.Driver -Djavax.jdo.option.ConnectionURL=jdbc:postgresql://postgres:5432/postgres -Djavax.jdo.option.ConnectionUserName=postgres -Djavax.jdo.option.ConnectionPassword=password
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 8G
+
+  hive-server-dev:
+    build: .
+    networks:
+      - spark-container-network-dbt
+    volumes:
+      - /tmp:/tmp
+    environment:
+      - SERVICE_NAME=hiveserver2
+      - DB_DRIVER=postgres    
+      - VERBOSE=true
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
+      - HADOOP_CLIENT_OPTS=-Xmx1G -Djavax.jdo.option.ConnectionDriverName=org.postgresql.Driver -Djavax.jdo.option.ConnectionURL=jdbc:postgresql://postgres:5432/postgres -Djavax.jdo.option.ConnectionUserName=postgres -Djavax.jdo.option.ConnectionPassword=password
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 8G
+
+networks:
+  spark-container-network-dbt:
+    external: true
