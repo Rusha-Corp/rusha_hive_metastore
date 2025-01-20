@@ -1,48 +1,94 @@
 services:
-  metastore-dev:
-    build: .
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    volumes:
+      - $HOME/postgresql/dbs/openalex:/var/lib/postgresql/data
+    networks:
+      - spark-container-network-dbt
+    hostname: postgres
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 4G
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s # Delay to ensure the database is fully ready
+
+  metastore:
+    build: 
+      context: .
+    ports:
+      - 9083:9083
     networks:
       - spark-container-network-dbt
     volumes:
-      - /tmp:/tmp
+      - ./conf/hive-site.xml:/opt/hive/conf/hive-site.xml
     environment:
       - SCHEMA_COMMAND=upgradeSchema
       - SERVICE_NAME=metastore
-      - DB_DRIVER=postgres    
-      - VERBOSE="true"
+      - DB_DRIVER=postgres   
+      - VERBOSE=true
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
-      - HADOOP_CLIENT_OPTS=-Xmx1G -Djavax.jdo.option.ConnectionDriverName=org.postgresql.Driver -Djavax.jdo.option.ConnectionURL=jdbc:postgresql://postgres:5432/postgres -Djavax.jdo.option.ConnectionUserName=postgres -Djavax.jdo.option.ConnectionPassword=password
+      - HADOOP_CLIENT_OPTS=-Djavax.jdo.option.ConnectionDriverName=org.postgresql.Driver -Djavax.jdo.option.ConnectionURL=jdbc:postgresql://postgres:5432/postgres -Djavax.jdo.option.ConnectionUserName=postgres -Djavax.jdo.option.ConnectionPassword=password
     restart: always
+    depends_on:
+      - postgres
     deploy:
       resources:
         limits:
           cpus: "2"
           memory: 8G
 
-  hive-server-dev:
-    build: .
+  hive-server:
+    build: 
+      context: .
+    ports:
+      - 10002:10002
     networks:
       - spark-container-network-dbt
     volumes:
-      - /tmp:/tmp
+      - ./conf/hive-site.xml:/opt/hive/conf/hive-site.xml
     environment:
-      - SERVICE_NAME=hiveserver2
-      - DB_DRIVER=postgres    
-      - VERBOSE=true
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
       - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}
-      - HADOOP_CLIENT_OPTS=-Xmx1G -Djavax.jdo.option.ConnectionDriverName=org.postgresql.Driver -Djavax.jdo.option.ConnectionURL=jdbc:postgresql://postgres:5432/postgres -Djavax.jdo.option.ConnectionUserName=postgres -Djavax.jdo.option.ConnectionPassword=password
+      - HADOOP_CLIENT_OPTS=-Dhive.metastore.uris=thrift://metastore:9083
+      - IS_RESUME=true
+      - SERVICE_NAME=hiveserver2
+      - VERBOSE=true
+      - DB_DRIVER=postgres    
     restart: always
+    depends_on:
+      - metastore
     deploy:
       resources:
         limits:
           cpus: "2"
           memory: 8G
+
+  pgAdmin:
+    image: dpage/pgadmin4
+    ports:
+      - 5050:80
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    networks:
+      - spark-container-network-dbt
+    restart: always
 
 networks:
   spark-container-network-dbt:

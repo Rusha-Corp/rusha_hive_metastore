@@ -3,8 +3,7 @@ set -e
 source .env
 output=$(aws sts assume-role \
   --role-arn $AWS_ROLE_ARN \
-  --role-session-name contabo-thrift-server \
-  --duration-seconds 36000)
+  --role-session-name hive-metastore)
 
 echo "Access Key ID: $(echo $output | jq -r '.Credentials.AccessKeyId')"
 echo "Secret Access Key: $(echo $output | jq -r '.Credentials.SecretAccessKey')"
@@ -15,4 +14,4 @@ export AWS_SECRET_ACCESS_KEY=$(echo $output | jq -r '.Credentials.SecretAccessKe
 export AWS_SESSION_TOKEN=$(echo $output | jq -r '.Credentials.SessionToken')
 
 
-docker compose up --build
+docker compose up --build -d --remove-orphans
