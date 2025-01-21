@@ -44,20 +44,4 @@
         <name>metastore.metastore.event.db.notification.api.auth</name>
         <value>false</value>
     </property>
-    <property>
-        <name>hive.server2.thrift.bind.host</name>
-        <value>0.0.0.0</value> <!-- Binds to all available interfaces -->
-    </property>
-    <property>
-        <name>hive.server2.session.check.interval</name>
-        <value>3000</value>
-    </property>
-    <property>
-        <name>hive.server2.session.check.expiry.interval</name>
-        <value>30000</value>
-    </property>
-    <property>
-        <name>hive.server2.session.max.worker.threads</name>
-        <value>3</value>
-    </property>
 </configuration>

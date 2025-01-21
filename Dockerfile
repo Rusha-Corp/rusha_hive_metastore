@@ -110,6 +110,8 @@ RUN mkdir -p /var/log/hive && \
 USER $USER
 WORKDIR /opt/hive
 
+COPY conf/hive-site.xml $HIVE_HOME/conf/
+
 COPY --from=build /app/target/lib/* $HIVE_HOME/lib/
 ENV PATH=$HIVE_HOME/bin:$HADOOP_HOME/bin:$PATH
 
