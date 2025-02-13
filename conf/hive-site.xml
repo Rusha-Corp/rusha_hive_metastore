@@ -44,4 +44,8 @@
         <name>metastore.metastore.event.db.notification.api.auth</name>
         <value>false</value>
     </property>
+    <property>
+        <name>hive.root.logger</name>
+        <value>INFO,DRFA</value>
+    </property>
 </configuration>

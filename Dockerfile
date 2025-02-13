@@ -44,7 +44,7 @@ ENV TEZ_HOME=${TEZ_HOME}
 # Install dependencies
 RUN set -ex; \
     apt-get update; \
-    apt-get -y install procps; \
+    apt-get -y install procps netcat; \
     rm -rf /var/lib/apt/lists/*
 
 # Download and install Hadoop

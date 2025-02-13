@@ -1,6 +1,7 @@
 certs
 
 hosts.ini
+backup_and_restore.sh
 
 testapi.py
 .Rproj.user
