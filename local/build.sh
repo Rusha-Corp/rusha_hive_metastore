@@ -5,5 +5,5 @@ aws ecr get-login-password --region eu-west-2 | docker login --username AWS --pa
 
 docker buildx build \
     --platform linux/amd64 \
-    -t ${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/prod/hive-metastore:latest \
+    -t ${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/prod/hive-metastore:v2 \
     . --push

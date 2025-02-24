@@ -5,6 +5,8 @@ javacOptions ++= Seq("-source", "17", "-target", "17")  // Java 17 compatibility
 
 libraryDependencies ++= Seq(
   "org.apache.iceberg" % "iceberg-aws" % "1.7.1" % "runtime",
+  "org.apache.iceberg" %% "iceberg-spark-runtime-3.5" % "1.7.1",
+  "org.apache.iceberg" % "iceberg-aws-bundle" % "1.7.1"
   "org.postgresql" % "postgresql" % "42.7.5",
   "org.apache.spark" %% "spark-hadoop-cloud" % "3.5.3"
 )
